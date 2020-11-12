@@ -20,7 +20,7 @@ contract("Token Test", async (accounts) => {
     ).to.be.a.bignumber.equal(totalSupply);
   });
 
-  it("Transfer tokens form on to another", async () => {
+  it("Transfer tokens form one to another", async () => {
     const senToken = 1;
     let instance = this.myToken;
     let totalSupply = await instance.totalSupply();
