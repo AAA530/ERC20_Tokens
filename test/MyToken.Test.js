@@ -1,14 +1,8 @@
 const Token = artifacts.require("MyTokens");
 require("dotenv").config({ path: "../.env" });
 
-var chai = require("chai");
+chai = require("./Setup");
 const BN = web3.utils.BN;
-const chainBN = require("chai-bn")(BN);
-
-chai.use(chainBN);
-
-var chaiAsPromise = require("chai-as-promised");
-chai.use(chaiAsPromise);
 
 const expect = chai.expect;
 contract("Token Test", async (accounts) => {
