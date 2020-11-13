@@ -9,8 +9,10 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 function App() {
-  // const [loaded, setLoaded] = useState(false);
-  const [kycAddress, setKycAddress] = useState();
+  const [accounts, setAccounts] = useState();
+  const [tokenInstance, setTokenInstance] = useState();
+  const [tokenSalesInstance, setTokenSalesInstance] = useState();
+  const [kycInstance, setKycInstance] = useState();
   const [obj, setObj] = useState({
     loaded: false,
     kycAddress: "",
@@ -25,24 +27,28 @@ function App() {
         // Use web3 to get the user's accounts.
         const accounts = await web3.eth.getAccounts();
 
+        setAccounts(accounts);
         // Get the contract instance.
         const networkId = await web3.eth.net.getId();
         const tokenInstance = new web3.eth.Contract(
           MyToken.abi,
           MyToken.networks[networkId] && MyToken.networks[networkId].address
         );
+        setTokenInstance(tokenInstance);
 
         const tokenSalesInstance = new web3.eth.Contract(
           MyTokenSale.abi,
           MyTokenSale.networks[networkId] &&
             MyTokenSale.networks[networkId].address
         );
+        setTokenSalesInstance(tokenSalesInstance);
 
         const kycInstance = new web3.eth.Contract(
           KycContract.abi,
           KycContract.networks[networkId] &&
             KycContract.networks[networkId].address
         );
+        setKycInstance(kycInstance);
 
         // Set web3, accounts, and contract to the state, and then proceed with an
         // example of interacting with the contract's methods.
@@ -70,7 +76,10 @@ function App() {
   };
 
   const handleKycWhiteListing = async () => {
-    await kycInstance.SetKycCompleted(obj.kycAddress);
+    await kycInstance.methods
+      .SetKycCompleted(obj.kycAddress)
+      .send({ from: accounts[0] });
+    alert("KYC is completed for " + obj.kycAddress);
   };
 
   console.log(obj);
